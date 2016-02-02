@@ -69,14 +69,14 @@ public class DLList<E> {
 	 * @return    the node of the list's first element, null if list is empty
 	 */
 	public Node getFirst() {
-		// TODO
+		return first;
 	}
 
 	/**
 	 * @return    the node of the list's last element, null if list is empty
 	 */
 	public Node getLast() {
-		// TODO
+		return last;
 	}
 
 	/** inserts a new element after a specified node
@@ -85,7 +85,14 @@ public class DLList<E> {
 	 * @return    the node holding the inserted element
 	 */
 	public Node insertAfter(E e, Node l) {
-		// TODO
+		Node newNode = new Node(e);
+		newNode.next = l.next;
+		if(l.next != null){
+			l.next.prev = newNode;
+		}
+		l.next = newNode;
+		newNode.prev = l;
+		return newNode;
 	}
 
 	/** inserts a new element before a specified node
