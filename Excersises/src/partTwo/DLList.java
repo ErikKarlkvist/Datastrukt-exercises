@@ -46,7 +46,15 @@ public class DLList<E> {
    * @return    the node holding the added element
    */
   public Node addLast(E e) {
-      // TODO
+      Node newNode = new Node(e);
+      if(first.equals(null)){
+    	  first = newNode;
+      }else{
+    	  last.next = newNode;
+      }
+      newNode.prev = last;
+      last = newNode;
+      return newNode;      
   }
   
   /**
