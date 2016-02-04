@@ -55,7 +55,7 @@ public class DLList<E> {
 	 */
 	public Node addLast(E e) {
 	      Node newNode = new Node(e);
-	      if(first.equals(null)){
+	      if(first == null){
 	    	  first = newNode;
 	      }else{
 	    	  last.next = newNode;
