@@ -117,6 +117,18 @@ public class DLList<E> {
 	 * @param l   then node containing the element that will be removed, must be non-null and a node belonging to this list
 	 */
 	public void remove(Node l) {
-		// TODO
+		if(l.prev == null){
+			first=l.next;
+		}else{
+			l.prev.next=l.next;
+		}
+		
+		if(l.next == null){
+			last=l.prev;
+		}else{
+			l.next.prev=l.prev;
+		}
+		
+
 	}
 }
