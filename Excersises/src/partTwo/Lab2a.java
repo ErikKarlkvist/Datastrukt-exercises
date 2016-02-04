@@ -8,7 +8,7 @@ public class Lab2a {
 		double[] polyCopy = poly.clone();
 		int pLength = polyCopy.length;
 		double minValue = Double.MAX_VALUE;
-		int indexSValue = -1;
+		int indexMinValue = -1;
 		if(pLength>4){
 			while(pLength/2 > k){
 				for(int i = 0; i < pLength-6; i+=2){
@@ -19,10 +19,10 @@ public class Lab2a {
 					double value = (l1 + l2 - l3);
 					if(value < minValue){
 						minValue = value;
-						indexSValue = i+2;
+						indexMinValue = i+2;
 					}
 				}//end for
-				polyCopy = removePoint(polyCopy, indexSValue);
+				polyCopy = removePoint(polyCopy, indexMinValue);
 				pLength = polyCopy.length;
 				minValue = Double.MAX_VALUE;
 			}//end while
