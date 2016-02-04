@@ -3,16 +3,17 @@ package partTwo;
 import java.awt.Point;
 import java.util.Comparator;
 import java.util.PriorityQueue;
-
+import partTwo.DLList.Node;;
 
 public class Lab2b {
 	
-	public static class NodeComparator<E extends DLList.Node> implements Comparator{
+	public static class NodeComparator<E extends Node> implements Comparator{
 
 		@Override
 		public int compare(Object arg0, Object arg1) {
-			DLList.Node node1 = (DLList.Node)arg0;
-			DLList.Node node2 = (DLList.Node)arg1;
+			Node node1 = (Node)arg0;
+			Node node2 = (Node)arg1;
+			
 			
 			return 0;
 		}
