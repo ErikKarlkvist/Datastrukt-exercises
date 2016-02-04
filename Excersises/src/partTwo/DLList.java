@@ -85,11 +85,12 @@ public class DLList<E> {
 	 * @return    the node holding the inserted element
 	 */
 	public Node insertAfter(E e, Node l) {
+		if(l.next == null){
+			return addLast(e);
+		}
 		Node newNode = new Node(e);
 		newNode.next = l.next;
-		if(l.next != null){
-			l.next.prev = newNode;
-		}
+		l.next.prev = newNode;
 		l.next = newNode;
 		newNode.prev = l;
 		return newNode;
@@ -101,8 +102,15 @@ public class DLList<E> {
 	 * @return    the node holding the inserted element
 	 */
 	public Node insertBefore(E e, Node l) {
+		if(l.prev == null){
+			return addFirst(e);
+		}
 		Node newNode = new Node(e);
-		
+		newNode.next = l;
+		l.prev.next = newNode;
+		newNode.prev = l.prev;
+		l.prev = newNode;
+		return newNode;
 	}
 
 	/** removes an element

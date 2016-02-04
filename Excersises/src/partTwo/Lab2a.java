@@ -87,5 +87,5 @@ public class Lab2a {
 		for(int i = 0; i < out2.length; i+=4){
 			//myGraph.drawLine(out[i], out[i+1], out[i+2], out[i+3], Color.RED, 5, 0);
 		}
-	}
+	}	
 }
