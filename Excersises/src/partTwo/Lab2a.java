@@ -1,14 +1,12 @@
 package partTwo;
 
-import java.awt.Color;
-
 public class Lab2a {
 	public static double[] simplifyShape(double[] poly, int k)
 	{
 		double[] polyCopy = poly.clone();
 		int pLength = polyCopy.length;
 		double minValue = Double.MAX_VALUE;
-		int indexMinValue = -1;
+		int indexSValue = -1;
 		if(pLength>4){
 			while(pLength/2 > k){
 				for(int i = 0; i < pLength-6; i+=2){
@@ -19,10 +17,10 @@ public class Lab2a {
 					double value = (l1 + l2 - l3);
 					if(value < minValue){
 						minValue = value;
-						indexMinValue = i+2;
+						indexSValue = i+2;
 					}
 				}//end for
-				polyCopy = removePoint(polyCopy, indexMinValue);
+				polyCopy = removePoint(polyCopy, indexSValue);
 				pLength = polyCopy.length;
 				minValue = Double.MAX_VALUE;
 			}//end while

@@ -85,7 +85,14 @@ public class DLList<E> {
 	 * @return    the node holding the inserted element
 	 */
 	public Node insertAfter(E e, Node l) {
-		
+		Node newNode = new Node(e);
+		newNode.next = l.next;
+		if(l.next != null){
+			l.next.prev = newNode;
+		}
+		l.next = newNode;
+		newNode.prev = l;
+		return newNode;
 	}
 
 	/** inserts a new element before a specified node
@@ -94,7 +101,8 @@ public class DLList<E> {
 	 * @return    the node holding the inserted element
 	 */
 	public Node insertBefore(E e, Node l) {
-		// TODO
+		Node newNode = new Node(e);
+		
 	}
 
 	/** removes an element
