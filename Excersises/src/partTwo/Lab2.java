@@ -22,7 +22,7 @@ public class Lab2 {
 	public static double[] readShape() {
 		//Scanner sc = new Scanner(System.in);
 		
-		File f = new File(Lab2.class.getResource("fig2.txt").getFile());
+		File f = new File(Lab2.class.getResource("fig2edit.txt").getFile());
 
 		Scanner sc = null;
 		try {
