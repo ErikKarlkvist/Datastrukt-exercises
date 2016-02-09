@@ -1,6 +1,8 @@
 package partTwo;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
@@ -18,7 +20,16 @@ public class Lab2 {
 	 * @return a (one-dimensional) array containing the values (x1, y1, x2, y2, etc)
 	 */
 	public static double[] readShape() {
-		Scanner sc = new Scanner(System.in);
+		//Scanner sc = new Scanner(System.in);
+		
+		File f = new File(Lab2.class.getResource("fig2.txt").getFile());
+
+		Scanner sc = null;
+		try {
+		    sc = new Scanner(f);
+		} catch (FileNotFoundException e) {
+		    e.printStackTrace();
+		}
 
 		List<Double> list = new ArrayList<Double>();
 
@@ -29,6 +40,7 @@ public class Lab2 {
 			list.add(new Double(n1));
 			list.add(new Double(n2));
 			n+=2;
+			System.out.println(n1 + " " + n2 );
 		}
 		//sc.close();
 
@@ -63,10 +75,10 @@ public class Lab2 {
 	}
 
 	public static void main(String[] args) {
-
+		
 		int size = 0; //n number of points in shape
 
-		int j = -1; // count arguments
+		/*int j = -1; // count arguments
 		int w = 15; // width
 		int h = 15; // heigth
 		int k = 8; // take away to k points
@@ -114,7 +126,11 @@ public class Lab2 {
 		if (k<2 || w<10 || h<10) {
 			System.err.println("main: either of k<2 || w<10 || h<10" );
 			System.exit(0);   // avsluta
-		}
+		}*/
+		
+		int k = 8;
+		int w = 12;
+		int h = 12;
 
 		shape = new DrawGraph(w, h);
 

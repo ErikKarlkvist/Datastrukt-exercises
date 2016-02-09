@@ -17,19 +17,15 @@ public class Lab2b {
 			 */
 			Node node1 = (Node)arg0;
 			Node node2 = (Node)arg1;
-			System.out.println("node1" + node1.getPrev());
-			System.out.println("node2" + node2.getPrev());
-			
-			if((node1.getNext() == null && node2.getPrev() == null) ||
+	
+			/*if((node1.getNext() == null && node2.getPrev() == null) ||
 					((node2.getNext() == null && node1.getPrev() == null))){
 				return 0;
-			}else if(node1.getNext() == null || node1.getPrev() == null){
+			}else*/ if(node1.getNext() == null || node1.getPrev() == null){
 				return 1;
 			}else if(node2.getNext() == null  || node2.getPrev() == null){
 				return -1;
 			}else{
-				System.out.println("compare node1" + node1.next.elt);
-				System.out.println("compare node2" + node2.next.elt);
 				return (int)(calculateValue(node1) - calculateValue(node2));
 			}
 		}
@@ -89,14 +85,24 @@ public class Lab2b {
 	{
 		DLList<Point> pointList = new DLList<Point>();
 		PriorityQueue<DLList.Node> pQueue = new PriorityQueue<DLList.Node>(11, new NodeComparator());
-		for(int i=0; i < poly.length; i+=2){
+		Point first = new Point();
+		Point last = new Point();
+		
+		first.setLocation(poly[0], poly[1]);
+		last.setLocation(poly[poly.length-2], poly[poly.length-1]);
+		pointList.addFirst(first);
+		pQueue.add(pointList.first);
+		
+		pointList.addLast(last);
+		pQueue.add(pointList.last);
+		for(int i=2; i < poly.length-2; i+=2){
 			Point p = new Point();
 			p.setLocation(poly[i], poly[i+1]);
-			pointList.addLast(p);
-			pQueue.add(pointList.last);
+			pointList.insertBefore(p, pointList.last);
+			pQueue.add(pointList.last.prev);
 		}
 		
-		/*while(pQueue.size() > k){
+		while(pQueue.size() > k){
 			Node rNode = pQueue.peek();
 			pointList.remove(rNode);
 			pQueue.remove(rNode);
@@ -113,8 +119,7 @@ public class Lab2b {
 			newArray[i+1] = ((Point)theNode.elt).getY();
 			theNode = theNode.next;
 		}
-		return newArray;*/
-		return poly;
+		return newArray;
 	}
 	
 	public static void main(String[] args){
@@ -148,10 +153,5 @@ public class Lab2b {
 			System.out.print(out2[i] + ", ");
 		}
 		System.out.print("}");
-		
-		DrawGraph myGraph = new DrawGraph();
-		for(int i = 0; i < out2.length; i+=4){
-			//myGraph.drawLine(out[i], out[i+1], out[i+2], out[i+3], Color.RED, 5, 0);
-		}
 	}
 }
