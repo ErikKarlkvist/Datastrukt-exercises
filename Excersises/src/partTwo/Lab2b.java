@@ -18,14 +18,18 @@ public class Lab2b {
 			Node node1 = (Node)arg0;
 			Node node2 = (Node)arg1;
 	
-			/*if((node1.getNext() == null && node2.getPrev() == null) ||
+			if((node1.getNext() == null && node2.getPrev() == null) ||
 					((node2.getNext() == null && node1.getPrev() == null))){
+				System.out.println("first if");
 				return 0;
-			}else*/ if(node1.getNext() == null || node1.getPrev() == null){
+			}else if(node1.getNext() == null || node1.getPrev() == null){
+				System.out.println("second if");
 				return 1;
 			}else if(node2.getNext() == null  || node2.getPrev() == null){
+				System.out.println("third if");
 				return -1;
 			}else{
+				System.out.println("best if");
 				return (int)(calculateValue(node1) - calculateValue(node2));
 			}
 		}
