@@ -12,26 +12,14 @@ public class Lab2b {
 
 		@Override
 		public int compare(Object arg0, Object arg1) {
-			/** this does not work 
-			 * 
-			 */
+			
 			Node node1 = (Node)arg0;
 			Node node2 = (Node)arg1;
 	
-			/*if((node1.getNext() == null && node2.getPrev() == null) ||
-					((node2.getNext() == null && node1.getPrev() == null))){
-				System.out.println("first if");
-				return 1;
-			}else if(node1.getNext() == null || node1.getPrev() == null){
-				return 1;
-			}else if(node2.getNext() == null  || node2.getPrev() == null){
-				return -1;
-			}else{*/
 			double value1 = calculateValue(node1);
 			double value2 = calculateValue(node2);
 			int comp = Double.compare(value1,value2);
 			return (comp);
-			//}
 		}
 		
 		/**
@@ -64,16 +52,17 @@ public class Lab2b {
 	{
 		DLList<Point> pointList = new DLList<Point>();
 		PriorityQueue<DLList.Node> pQueue = new PriorityQueue<DLList.Node>(11, new NodeComparator());
+		// We add the first and last point to the DLList, but not to the PriorityQueue, since 
+		// you should never be able to remove the end points of the list.
 		Point first = new Point();
 		Point last = new Point();
 		
 		first.setLocation(poly[0], poly[1]);
 		last.setLocation(poly[poly.length-2], poly[poly.length-1]);
-		pointList.addFirst(first);
-		//pQueue.add(pointList.first);
 		
+		pointList.addFirst(first);
 		pointList.addLast(last);
-		//pQueue.add(pointList.last);
+		
 		for(int i=2; i < poly.length-2; i+=2){
 			Point p = new Point();
 			p.setLocation(poly[i], poly[i+1]);
@@ -92,10 +81,14 @@ public class Lab2b {
 			pointList.remove(rNode);
 			pQueue.remove(rNode);
 			
+			// Here we remove the previous node, then add it again in order to update 
+			// it's value, and place in the PiorityQueue, but only if it's not the first
+			// node
 			if(rNode.prev != pointList.getFirst()){
 				pQueue.remove(rNode.prev);
 				pQueue.add(rNode.prev);
 			}
+			// Same here, but with the nex node and last node
 			if(rNode.next != pointList.getLast()){
 				pQueue.remove(rNode.next);
 				pQueue.add(rNode.next);
@@ -104,6 +97,7 @@ public class Lab2b {
 		
 		Node theNode = pointList.getFirst();
 		double[] newArray = new double[2*k];
+		// Creates a new array with the x and y values of the simplified shape
 		for(int i=0; i<2*k; i+=2){
 			newArray[i] = ((Point)theNode.elt).getX();
 			newArray[i+1] = ((Point)theNode.elt).getY();
