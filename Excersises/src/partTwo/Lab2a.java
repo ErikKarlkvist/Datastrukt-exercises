@@ -34,10 +34,14 @@ public class Lab2a {
 
 	private static double[] removePoint(double[] array, int index){
 		int length = array.length;
+		// A new array, 2 shorter (1 point) than the argument array
 		double[] tmpArray = new double[length - 2];
+		// Fills the first part of the new array up until the 2 doubles that will be removed
 		for(int m = 0; m < index; m++){
 			tmpArray[m] = array[m];
 		}
+		// Continues to fill the new array after the 2 doubles to be removed, effectively
+		// making a new array without the now removed doubles
 		for(int j = index+2; j < length; j++){
 			tmpArray[j-2] = array[j];
 		}
