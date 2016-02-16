@@ -62,6 +62,9 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
 	@Override
 	public boolean remove(E x) {
 		Node<E> node = findNodeRec(first, x);
+		if(node == null){
+			return false;
+		}
 		if(node.left == null && node.right == null){
 			first = null;
 			last = null;
