@@ -1,108 +1,84 @@
 package partTwo;
 
-import java.awt.Point;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-import partTwo.DLList.Node;;
-
 public class Lab2b {
 	
-	public static class NodeComparator<E extends DLList<Point>.Node> implements Comparator{
+	public static class PointComparator implements Comparator<DLList<double[]>.Node>{
 
 		@Override
-		public int compare(Object arg0, Object arg1) {
-			
-			Node node1 = (Node)arg0;
-			Node node2 = (Node)arg1;
-	
-			double value1 = calculateValue(node1);
-			double value2 = calculateValue(node2);
-			int comp = Double.compare(value1,value2);
-			return (comp);
+		public int compare(DLList<double[]>.Node arg0, DLList<double[]>.Node arg1) {
+			return Double.compare(calculateValue(arg0),calculateValue(arg1));
 		}
 		
-		/**
-		 * 
-		 * @param node must have prev and next
-		 * @return
-		 */
-		private double calculateValue(Node node){
-			
-			Point p1 = (Point)node.prev.elt;
-			Point p2 = (Point)node.elt;
-			Point p3 = (Point)node.next.elt;
-			
-			double l1 = calcDistBetweenPoints(p1, p2);
-			double l2 = calcDistBetweenPoints(p2, p3);
-			double l3 = calcDistBetweenPoints(p1 ,p3);
-			
-			return (l1 + l2 - l3);
-		}
-		
-		private double calcDistBetweenPoints(Point p1, Point p2){
-			double x = (p1.getX()-p2.getX());
-			double y = (p1.getY()-p2.getY());
-			return Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
-		}
+		//calculates distance with formula given in lab pm
+		private double calculateValue(DLList<double[]>.Node node){
+	        double[] L = (double[]) node.getPrev().elt;
+	        double[] P = (double[]) node.elt;
+	        double[] R = (double[]) node.getNext().elt;
+
+	        double l1 = Math.sqrt(Math.pow(L[0] - P[0], 2) + Math.pow(L[1] - P[1], 2));
+	        double l2 = Math.sqrt(Math.pow(P[0] - R[0], 2) + Math.pow(P[1] - R[1], 2));
+	        double l3 = Math.sqrt(Math.pow(L[0] - R[0], 2) + Math.pow(L[1] - R[1], 2));
+
+	        return Math.abs(l1+l2-l3);
+	    }
 		
 	}
 	
 	public static double[] simplifyShape(double[] poly, int k)
 	{
-		DLList<Point> pointList = new DLList<Point>();
-		PriorityQueue<DLList.Node> pQueue = new PriorityQueue<DLList.Node>(11, new NodeComparator());
-		// We add the first and last point to the DLList, but not to the PriorityQueue, since 
-		// you should never be able to remove the end points of the list.
-		Point first = new Point();
-		Point last = new Point();
+		DLList<double[]> pointList = new DLList<double[]>();
+		Comparator<DLList<double[]>.Node> comp = new PointComparator();
+		PriorityQueue<DLList<double[]>.Node> pQueue = new PriorityQueue<DLList<double[]>.Node>(poly.length/2, comp);
 		
-		first.setLocation(poly[0], poly[1]);
-		last.setLocation(poly[poly.length-2], poly[poly.length-1]);
+		//Add the first and last point to the list but not the priorityqueue
+		double[] firstPoint = {poly[0], poly[1]};
+		double[] lastPoint = {poly[poly.length-2], poly[poly.length-1]};
 		
-		pointList.addFirst(first);
-		pointList.addLast(last);
+		DLList<double[]>.Node firstNode = pointList.addFirst(firstPoint);
+		pointList.addLast(lastPoint);
 		
+		//add all other points to list and priorityqueue
+		DLList<double[]>.Node nextNode = firstNode;
 		for(int i=2; i < poly.length-2; i+=2){
-			Point p = new Point();
-			p.setLocation(poly[i], poly[i+1]);
-			pointList.insertBefore(p, pointList.getLast());
-			//pQueue.add(pointList.last.prev);
+			double[] tmpPoint = {poly[i],poly[i+1]};
+			nextNode = pointList.insertAfter(tmpPoint, nextNode);
+			pQueue.add(nextNode);
 		}
 		
-		DLList.Node node = pointList.getFirst().next;
-		while(node != pointList.getLast()){
-			pQueue.add(node);
-			node = node.next;
-		}
+		//Removes node with highest priority and updates queue
+        while (pQueue.size()+2 > k) {
+            DLList<double[]>.Node head = pQueue.remove();
+            pointList.remove(head);
+            
+         // Here we remove the previous node, then add it again in order to update 
+         // it's value, and place in the PiorityQueue, but only if it's not the first in the queue (not first or last in list)
+            if (head.getPrev().getPrev() != null) {
+                pQueue.remove(head.getPrev());
+                pQueue.add(head.getPrev());
+            }
+            
+         // Same here, but with the next node and last node
+            if (head.getNext().getNext() != null) {
+                pQueue.remove(head.getNext());
+                pQueue.add(head.getNext());
+            }
+        }
 		
-		while(pQueue.size()+2 > k){
-			Node rNode = pQueue.peek();
-			pointList.remove(rNode);
-			pQueue.remove(rNode);
-			
-			// Here we remove the previous node, then add it again in order to update 
-			// it's value, and place in the PiorityQueue, but only if it's not the first
-			// node
-			if(rNode.prev != pointList.getFirst()){
-				pQueue.remove(rNode.prev);
-				pQueue.add(rNode.prev);
-			}
-			// Same here, but with the nex node and last node
-			if(rNode.next != pointList.getLast()){
-				pQueue.remove(rNode.next);
-				pQueue.add(rNode.next);
-			}		
-		}
-		
-		Node theNode = pointList.getFirst();
+        
+        //convert DLList to array
+		DLList<double[]>.Node currNode = pointList.getFirst();
 		double[] newArray = new double[2*k];
-		// Creates a new array with the x and y values of the simplified shape
-		for(int i=0; i<2*k; i+=2){
-			newArray[i] = ((Point)theNode.elt).getX();
-			newArray[i+1] = ((Point)theNode.elt).getY();
-			theNode = theNode.next;
-		}
+		int i = 0;
+        while (currNode != null) {
+            newArray[i] = currNode.elt[0];
+            newArray[i + 1] = currNode.elt[1];
+            i = i + 2;
+            currNode = currNode.getNext();
+
+        }
 		return newArray;
 	}
 }

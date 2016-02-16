@@ -1,11 +1,13 @@
 package partTwo;
 
-import java.awt.Color;
+
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 
 // Erland Holmström 2015 01 22
 // modifierad av Fredrik Lindblad
@@ -20,15 +22,16 @@ public class Lab2 {
 	 * @return a (one-dimensional) array containing the values (x1, y1, x2, y2, etc)
 	 */
 	public static double[] readShape() {
-		//Scanner sc = new Scanner(System.in);
-		
-		File f = new File(Lab2.class.getResource("fig2edit.txt").getFile());
+
+
+
+		File f = new File(Lab2.class.getResource("fig2.txt").getFile());
 
 		Scanner sc = null;
 		try {
-		    sc = new Scanner(f);
+			sc = new Scanner(f);
 		} catch (FileNotFoundException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 
 		List<Double> list = new ArrayList<Double>();
@@ -40,7 +43,6 @@ public class Lab2 {
 			list.add(new Double(n1));
 			list.add(new Double(n2));
 			n+=2;
-			System.out.println(n1 + " " + n2 );
 		}
 		//sc.close();
 
@@ -55,7 +57,7 @@ public class Lab2 {
 	/**
 	 * Draws a line between every point in the list.
 	 * @param c The color to draw in
-	 * @param layer draw in base layer, overlay1 or overlay2
+	 * @param l draw in base layer, overlay1 or overlay2
 	 */
 	public static void drawShape(double[] points, Color c, DrawGraph.Layer l) {
 		shape.clearLayer(l);
@@ -75,76 +77,87 @@ public class Lab2 {
 	}
 
 	public static void main(String[] args) {
-		
-		int size = 0; //n number of points in shape
 
-		/*int j = -1; // count arguments
+		int size = 0; //n number of points in shape
+		int j = -1; // count arguments
 		int w = 15; // width
 		int h = 15; // heigth
-		int k = 8; // take away to k points
-		// tag hand om flaggorna								 
+		int k = 6; // take away to k points
+		// tag hand om flaggorna
 		while  ( j+1 < args.length && args[j+1].charAt(0) == '-' )  {
 			j = j+1;
 			//System.out.println("j= " + j + " " + args[j] );
 			switch ( args[j].charAt(1) ) {
-			case 'k': {
-				try {
-					k = Integer.parseInt( args[j].substring(2) );
+				case 'k': {
+					try {
+						k = Integer.parseInt( args[j].substring(2) );
+					}
+					catch ( NumberFormatException e ) {
+						System.out.println("main: k must have numerical argument");
+						System.exit(0);
+					}
 				}
-				catch ( NumberFormatException e ) {
-					System.out.println("main: k must have numerical argument");
-					System.exit(0);
+				break;
+				case 'w' : {
+					try {
+						w = Integer.parseInt( args[j].substring(2) );
+					}
+					catch ( NumberFormatException e ) {
+						System.out.println("main: w must have numerical argument");
+						System.exit(0);
+					}
 				}
-			}
-			break;
-			case 'w' : {
-				try {
-					w = Integer.parseInt( args[j].substring(2) );
+				break;
+				case 'h' : {
+					try {
+						h = Integer.parseInt( args[j].substring(2) );
+					}
+					catch ( NumberFormatException e ) {
+						System.out.println("main: h must have numerical argument");
+						System.exit(0);
+					}
 				}
-				catch ( NumberFormatException e ) {
-					System.out.println("main: w must have numerical argument");
-					System.exit(0);
-				}
-			}
-			break;
-			case 'h' : {
-				try {
-					h = Integer.parseInt( args[j].substring(2) );
-				}
-				catch ( NumberFormatException e ) {
-					System.out.println("main: h must have numerical argument");
-					System.exit(0);
-				}
-			}
-			break;
-			default : 
-				System.err.println("main: unknown flag: " + args[j]);
-				System.exit(0);   // avsluta
+				break;
+				default :
+					System.err.println("main: unknown flag: " + args[j]);
+					System.exit(0);   // avsluta
 			} // end switch
 		} // end loop;
 		// kolla argument
 		if (k<2 || w<10 || h<10) {
 			System.err.println("main: either of k<2 || w<10 || h<10" );
 			System.exit(0);   // avsluta
-		}*/
-		
-		int k = 8;
-		int w = 12;
-		int h = 12;
+		}
 
 		shape = new DrawGraph(w, h);
-
+		System.out.println("declared shape");
 		// read from user/file
-		double[] points = readShape();
-
+		
+		double[] points = {
+				2.0145, 1.0134,
+				3.0746 ,1.0232,
+				4.0163, 2.0972,
+				4.0516, 4.0152,
+				9.0862, 4.0917,
+				10.0828, 5.0998,
+				10.0862, 7.0552,
+				9.0382, 8.0277,
+				7.0287, 8.0735,
+				2.0933, 5.0293,
+				1.0238, 4.0023,
+				2.9283, 3.0283,
+				2.093, 2.0239
+		};
+		//double[] points = readShape();
+		System.out.printf("read");
 		System.out.println("********** draws original shape in black");
 		// draw original
 		drawShape(points, Color.BLACK, DrawGraph.Layer.BASE);
+		System.out.println("draw");
 
 		double[] simppointsa = Lab2a.simplifyShape(points, k);
-
 		try{ // take a break - oförklarliga timing problems med uppritningen
-			//			outline.wait(1000);
+//			outline.wait(1000);
 		} catch (Exception e ) {
 		}
 
@@ -154,7 +167,7 @@ public class Lab2 {
 		double[] simppointsb = Lab2b.simplifyShape(points, k);
 
 		try{ // take a break - oförklarliga timing problems med uppritningen
-			//			outline.wait(1000);
+//			outline.wait(1000);
 		} catch (Exception e ) {
 		}
 		System.out.println("********** draws shape generated by algorithm b in blue");
