@@ -9,7 +9,7 @@ public class Lab2a {
 		int indexSValue = -1;
 		if(pLength>4){
 			while(pLength/2 > k){
-				for(int i = 0; i < pLength-6; i+=2){
+				for(int i = 0; i <= pLength-6; i+=2){
 					double l1 = calcDistFromArray(polyCopy,i,i+2);
 					double l2 = calcDistFromArray(polyCopy,i+2,i+4);
 					double l3 = calcDistFromArray(polyCopy,i,i+4);

@@ -3,29 +3,30 @@ package partThree;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class TestSetCorrectness {
-	
-	private Set<Integer> testSet;
-	private SimpleSet<Integer> linkedSet;
-	
+
+	public Set<Integer> testSet;
+	public SortedLinkedListSet<Integer> linkedSet; // change
+
 	public boolean isCorrect;
 	private int test, nbrOfIntegers, chosenAction, testedInt;
 	public TestSetCorrectness(int test, int nbrOfIntegers){
 		this.test = test;
 		this.nbrOfIntegers = nbrOfIntegers;
-		linkedSet = new SortedLinkedListSet<Integer>();
+		testSet = new TreeSet<Integer>();
 		if(test == 1){
-			testSet = new HashSet<Integer>();	
+			linkedSet = new SortedLinkedListSet<Integer>();
 		} else {
-			
+
 		}
 	}
-	
+
 	private void doAction(){
 		isCorrect = true;
 		Random rand = new Random();
-		chosenAction = rand.nextInt(3);
+		chosenAction = rand.nextInt(4);
 		switch (chosenAction){
 		case 0:
 			checkSize();
@@ -49,26 +50,27 @@ public class TestSetCorrectness {
 	private void checkAdd() {
 		Random rand = new Random();
 		testedInt = rand.nextInt(nbrOfIntegers);
-		isCorrect = (testSet.add(testedInt) && linkedSet.add(testedInt));
+		isCorrect = (testSet.add(testedInt) == linkedSet.add(testedInt));
 	}
 
 	private void checkRemove() {
 		Random rand = new Random();
 		testedInt = rand.nextInt(nbrOfIntegers);
-		isCorrect = (testSet.remove(testedInt) && linkedSet.remove(testedInt));
+		isCorrect = (testSet.remove(testedInt) == linkedSet.remove(testedInt));
 	}
 
 	private void checkContains() {
 		Random rand = new Random();
 		testedInt = rand.nextInt(nbrOfIntegers);
-		isCorrect = (testSet.contains(testedInt) && linkedSet.contains(testedInt));
+		isCorrect = (testSet.contains(testedInt) == linkedSet.contains(testedInt));
 	}
-	
+
 	public static void main(String args[]){
 		int restarts = 10;
 		int numberOfActions = 100;
 		TestSetCorrectness myTest = new TestSetCorrectness(1,100);
-		for(int i = 0; i < numberOfActions; i++){
+		int finishedActions = 0;
+		for(; finishedActions < numberOfActions; finishedActions++){
 			myTest.doAction();
 			if(!myTest.isCorrect){
 				switch(myTest.chosenAction){
@@ -85,8 +87,9 @@ public class TestSetCorrectness {
 					System.out.println("Contains did not match at " + myTest.testedInt);
 					break;
 				}
-				//break;
+				break;
 			}
 		}
+		System.out.println("Test finished with " + restarts + " restarts and " + finishedActions + " actions at last restart (goal = " + numberOfActions + " actions)");
 	}
 }
