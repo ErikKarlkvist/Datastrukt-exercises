@@ -27,9 +27,8 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 			size++;
 			return true;
 		} else {
-			value = addRec(root, x);
+			return value = addRec(root, x);
 		}
-		return value;
 	}
 
 	private boolean addRec(Node<E> parent, E x){
@@ -40,6 +39,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 			if(parent.leftChild == null){
 				parent.leftChild = new Node<E>(x);
 				parent.leftChild.parent = parent;
+				moveToRoot(parent.leftChild);
 				size++;
 				return true;
 			} else {
@@ -49,6 +49,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 			if(parent.rightChild == null){
 				parent.rightChild = new Node<E>(x);
 				parent.rightChild.parent = parent;
+				moveToRoot(parent.rightChild);
 				size++;
 				return true;
 			} else {
@@ -56,50 +57,76 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 			}
 		}
 	}
-	
-	private boolean moveToRoot(Node<E> node){
-		if(node != root){
-			return moveToRootRec(node);
-		}
-		return true;
+
+	public boolean moveToRoot(Node<E> node){
+		return moveToRootRec(node);
 	}
-	
+
 	private boolean moveToRootRec(Node<E> node){
-		
+		if(node == root){
+			return true;
+		}
+		if(node.parent == root){
+			if(node.parent.leftChild == node){
+				zig(node, true);
+			}else {
+				zig(node, false);
+			}
+		} else if(node.parent.parent.leftChild == node.parent){
+			if(node.parent.leftChild == node){
+				zigzig(node, true);
+			} else {
+				zigzag(node, true);
+			}
+		} else {
+			if(node.parent.rightChild == node){
+				zigzig(node, false);
+			} else {
+				zigzag(node, false);
+			}
+		}
+		return moveToRootRec(node);
 	}
 
 	/**
 	 * Sets the left child of root to root/performs right rotation
 	 */
-	private void zig(){
-		if(root != null && root.leftChild != null){
-			Node<E> child = root.leftChild;
-			root.leftChild = child.rightChild;
-			if(child.rightChild != null){
-				child.rightChild.parent = root;
-			}
-			child.rightChild = root;
-			root.parent = child;
-			root = child;
+	private void zig(Node<E> node, boolean goRight){
+		if(goRight){
+			rightRotation(node);
+		} else {
+			leftRotation(node);
 		}
 	}
 
 	/**
 	 * 
-	 * @param node and parent are leftchild
+	 * @param node must have a parent
+	 * @param goRight true does right rotation, false does left
 	 */
-	private void zigzig(Node<E> node){
-		rightRotation(node.parent);
-		rightRotation(node);
+	private void zigzig(Node<E> node, boolean goRight){
+		if(goRight){
+			rightRotation(node.parent);
+			rightRotation(node);
+		} else {
+			leftRotation(node.parent);
+			leftRotation(node);
+		}
 	}
 
 	/**
 	 * 
 	 * @param node is leftchild and parent is rightchild
 	 */
-	private void zigzag(Node<E> node){
-		leftRotation(node);
-		rightRotation(node);
+	private void zigzag(Node<E> node, boolean parentRight){
+		if(parentRight){
+			leftRotation(node);
+			rightRotation(node);
+		} else {
+			rightRotation(node);
+			leftRotation(node);
+		}
+		
 	}
 
 	private void leftRotation(Node<E> child){
@@ -123,6 +150,9 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 
 		child.leftChild = parent;
 		parent.parent = child;
+		if(parent == root){
+			root = child;
+		}
 	}
 
 	/**
@@ -150,17 +180,118 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 
 		child.rightChild = parent;
 		parent.parent = child;
+		if(parent == root){
+			root = child;
+		}
 	}
 
 	@Override
 	public boolean remove(E x) {
+		Node<E> oldRootRightChild = root.rightChild;
+		Node<E> node = findRec(root, x);
+		moveToRoot(node);
+		if(node == null){
+			return false;
+		}
+		Node<E> lChild = node.leftChild;
+		if(lChild == null){
+			root = node.rightChild;
+		} else {
+			lChild.parent = null;
+			node.rightChild.parent = null;
+			Node<E> largestLeft = findLargestRec(lChild);
+			moveToTop(largestLeft);
+			largestLeft.rightChild = oldRootRightChild;
+			System.out.println(largestLeft.rightChild.elt);
+			root = largestLeft;
+		}
 		return true;
+	}
+	
+	private boolean moveToTop(Node<E> node){
+		if(node.parent == null){
+			return true;
+		} else {
+			leftRotation(node);
+			return moveToTop(node);
+		}
+	}
+	
+	private Node<E> findLargestRec(Node<E> node){
+		if(node.rightChild == null){
+			return node;
+		} else {
+			return findLargestRec(node.rightChild);
+		}
 	}
 
 	@Override
 	public boolean contains(E x) {
-		// TODO Auto-generated method stub
-		return false;
+		Node<E> node = findRec(root, x);
+		if(node == null){
+			return false;
+		} else {
+			moveToRoot(node);
+			return true;
+		}
+	}
+	
+	private Node<E> findRec(Node<E> compNode, E x){
+		if(compNode == null){
+			return null;
+		} else {
+			int comp = x.compareTo(compNode.elt);
+			if(comp == 0){
+				return compNode;
+			}else if(comp < 0){
+				return findRec(compNode.leftChild, x);
+			} else {
+				return findRec(compNode.rightChild, x);
+			}
+		}
+	}
+	
+	public static void main(String[] args){
+		SplayTreeSet<Integer> test = new SplayTreeSet<Integer>();
+		test.add(5);
+		System.out.println(test.root.elt + " 5?");
+		test.add(8);
+		System.out.println(test.root.elt + " 8?");
+		System.out.println(test.root.leftChild.elt + " 5?");
+		test.add(6);
+		System.out.println(test.root.elt + " 6?");
+		System.out.println(test.root.leftChild.elt + " 5?");
+		System.out.println(test.root.rightChild.elt + " 8?");
+		test.add(9);
+		System.out.println(test.root.elt + " 9?");
+		System.out.println(test.root.leftChild.elt + " 8?");
+		System.out.println(test.root.rightChild + " NULL?");
+		System.out.println(test.root.leftChild.leftChild.elt + " 6?");
+		System.out.println(test.root.leftChild.leftChild.leftChild.elt + " 5?");
+		test.add(10);
+		System.out.println(test.root.elt + " 10?");
+		System.out.println(test.root.leftChild.elt + " 9?");
+		System.out.println(test.root.rightChild + " NULL?");
+		System.out.println(test.root.leftChild.leftChild.elt + " 8?");
+		test.moveToRoot(test.root.leftChild.leftChild);
+		System.out.println(test.root.elt + " 8?");
+		System.out.println(test.root.leftChild.elt + " 6?");
+		System.out.println(test.root.rightChild.elt + " 9?");
+		System.out.println(test.size() + " size 5?");
+		
+		System.out.println("-----------------------------------------------------------");
+		System.out.println("");
+		System.out.println(test.contains(5) + " true");
+		System.out.println(test.root.elt + " 5?");
+		System.out.println(test.contains(12) + " false");
+		System.out.println(test.root.elt + " 5?");
+		System.out.println("-----------------------------------------------------------");
+		test.remove(6);
+		System.out.println(test.root.elt + " 5?");
+		test.remove(9);
+		System.out.println(test.root.elt + " 8?");
+		
+
 	}
 
 }
