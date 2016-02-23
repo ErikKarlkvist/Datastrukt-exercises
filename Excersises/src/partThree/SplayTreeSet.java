@@ -21,38 +21,51 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 
 	@Override
 	public boolean add(E x) {
-		boolean value;
+		// Adds node to an empty tree
 		if(root == null){
 			root = new Node<E>(x);
 			size++;
 			return true;
 		} else {
-			return value = addRec(root, x);
+			// or adds node at the correct position in existing tree using
+			// a recursive method
+			return addRec(root, x);
 		}
 	}
 
 	private boolean addRec(Node<E> parent, E x){
 		int comp = x.compareTo(parent.elt);
 		if(comp == 0){
+			// Doesn't add anything if the node already exist
 			return false;
 		} else if(comp < 0){
+			// Adds a node(x) as a leftChild to parent if x is less than parent
+			// and parent doesn't have any leftChild
 			if(parent.leftChild == null){
 				parent.leftChild = new Node<E>(x);
 				parent.leftChild.parent = parent;
+				// Splays
 				moveToRoot(parent.leftChild);
 				size++;
 				return true;
 			} else {
+				// If parent has leftChild, check if x is lesser than, or greater than 
+				// leftChild, using the recursive addRec
 				return addRec(parent.leftChild, x);
 			}
 		} else {
 			if(parent.rightChild == null){
+				// Adds a node(x) as a rightChild to parent if x is greater than parent
+				// and parent doesn't have any rightChild
 				parent.rightChild = new Node<E>(x);
 				parent.rightChild.parent = parent;
+				// Splays
 				moveToRoot(parent.rightChild);
 				size++;
 				return true;
 			} else {
+				// If parent has rightChild, check if x is lesser than, or greater than 
+				// leftChild, using the recursive addRec
 				return addRec(parent.rightChild, x);
 			}
 		}
@@ -62,6 +75,13 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		return moveToRootRec(node);
 	}
 
+	/**
+	 * Decides what operation should be performed of zig, zigzig and zigzag in
+	 * order to bring the node to the root (splaying). Continues recursively 
+	 * until node == root.
+	 * @param node
+	 * @return
+	 */
 	private boolean moveToRootRec(Node<E> node){
 		if(node == root){
 			return true;
@@ -187,10 +207,13 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 
 	@Override
 	public boolean remove(E x) {
+		// Tries to find the node
 		Node<E> node = findRec(root, x);
+		// Return false if node cannot be found
 		if(node == null){
 			return false;
 		}
+		// Splays
 		moveToRoot(node);
 		Node<E> lChild = node.leftChild;
 		Node<E> rChild = node.rightChild;
@@ -199,6 +222,8 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		} else if(rChild != null){
 			lChild.parent = null;
 			rChild.parent = null;
+			// Finds the largest node left of the root, the node to
+			// be removed, and sets it to the new root
 			Node<E> largestLeft = findLargestRec(lChild);
 			moveToTop(largestLeft);
 			largestLeft.rightChild = rChild;
@@ -206,6 +231,8 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 			lChild.parent = largestLeft;
 			root = largestLeft;
 		} else {
+			// if both the left and the right child are null, the tree is
+			// empty, and the root is therefore null
 			root = null;
 		}
 		size--;
@@ -221,6 +248,8 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		}
 	}
 	
+	// Continues until the rightmost node, starting from "node", is reached in order to
+	// find the largest node, lesser than "node", then return it
 	private Node<E> findLargestRec(Node<E> node){
 		if(node.rightChild == null){
 			return node;
@@ -240,6 +269,14 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		}
 	}
 	
+	/**
+	 * Finds a node by comparing x with the value of a node, then using this
+	 * recursive method to compare with the leftChild or righChild, depending
+	 * on if x is greater or lesser than the node.
+	 * @param compNode
+	 * @param x
+	 * @return
+	 */
 	private Node<E> findRec(Node<E> compNode, E x){
 		if(compNode == null){
 			return null;
