@@ -8,7 +8,7 @@ import java.util.TreeSet;
 public class TestSetCorrectness {
 
 	public Set<Integer> testSet;
-	public SortedLinkedListSet<Integer> linkedSet; // change
+	public SimpleSet<Integer> linkedSet; // change
 
 	public boolean isCorrect;
 	private int test, nbrOfIntegers, chosenAction, testedInt;
@@ -19,7 +19,7 @@ public class TestSetCorrectness {
 		if(test == 1){
 			linkedSet = new SortedLinkedListSet<Integer>();
 		} else {
-
+			linkedSet = new SplayTreeSet<Integer>();
 		}
 	}
 
@@ -68,7 +68,7 @@ public class TestSetCorrectness {
 	public static void main(String args[]){
 		int restarts = 10;
 		int numberOfActions = 100;
-		TestSetCorrectness myTest = new TestSetCorrectness(1,100);
+		TestSetCorrectness myTest = new TestSetCorrectness(2,100);
 		int finishedActions = 0;
 		for(; finishedActions < numberOfActions; finishedActions++){
 			myTest.doAction();

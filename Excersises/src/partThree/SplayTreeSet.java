@@ -208,6 +208,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		} else {
 			root = null;
 		}
+		size--;
 		return true;
 	}
 	
