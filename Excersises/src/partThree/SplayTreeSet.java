@@ -71,7 +71,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		}
 	}
 
-	public boolean moveToRoot(Node<E> node){
+	private boolean moveToRoot(Node<E> node){
 		return moveToRootRec(node);
 	}
 

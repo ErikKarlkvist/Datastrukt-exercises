@@ -69,13 +69,16 @@ public class TestSetCorrectness {
 	}
 
 	public static void main(String args[]) {
-		int restarts = 10000;
-		int successfulRestarts = 0;
-		int numberOfActions = 100;
+		int implementationNbr = Integer.parseInt(args[0]);
+		int restarts = Integer.parseInt(args[1]);
+		int numberOfActions = Integer.parseInt(args[2]);
+		int nbrOfIntegers = Integer.parseInt(args[3]);
 		
+		int successfulRestarts = 0;
 		int finishedActions = 0;
+		int restartsCopy = restarts;
 		for (; restarts > 0; restarts--, successfulRestarts++) {
-			TestSetCorrectness myTest = new TestSetCorrectness(2, 20);
+			TestSetCorrectness myTest = new TestSetCorrectness(implementationNbr, nbrOfIntegers);
 			for (; finishedActions < numberOfActions; finishedActions++) {
 				myTest.doAction();
 				if (!myTest.isCorrect) {
@@ -102,8 +105,9 @@ public class TestSetCorrectness {
 				}
 			}
 		}
-		System.out.println("Test finished with " + successfulRestarts + " restarts and "
+		String implementation = implementationNbr == 1 ? "SortedLinkedSet" : "SplayTreeSet";
+		System.out.println(implementation + " finished with " + successfulRestarts + " restarts and "
 				+ finishedActions + " actions at last restart (goal = "
-				+ numberOfActions + " actions)");
+				+ numberOfActions + " actions, " + restartsCopy + " restarts)");
 	}
 }

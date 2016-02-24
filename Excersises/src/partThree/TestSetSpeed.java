@@ -12,7 +12,7 @@ class TestSetSpeed {
 		SimpleSet<Integer> set = 
 				implnumber == 1 ? new SortedLinkedListSet<Integer>() : new SplayTreeSet<Integer>();
 
-				final int size = 1;//Integer.parseInt(args[1]);
+				final int size = 10;//Integer.parseInt(args[1]);
 
 				final int bound = 2 * size;
 
