@@ -79,14 +79,6 @@ public class TestSetCorrectness {
 			for (; finishedActions < numberOfActions; finishedActions++) {
 				myTest.doAction();
 				if (!myTest.isCorrect) {
-					BTreePrinter.printNode(((SplayTreeSet<Integer>)myTest.linkedSet).root);
-					String s = "";
-					for (Iterator iterator = myTest.testSet.iterator(); iterator
-							.hasNext();) {
-						Integer i = (Integer) iterator.next();
-						s+=i + ",";
-					}
-					System.out.println(s);
 					switch (myTest.chosenAction) {
 					case 0:
 						System.out.println("test : " + myTest.testSet.size());
