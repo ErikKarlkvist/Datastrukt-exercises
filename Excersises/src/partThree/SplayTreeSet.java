@@ -4,15 +4,15 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 
 	int size = 0;
 	Node<E> root;
-
-	public class Node<E>{
-		E elt;
-		Node<E> leftChild, rightChild, parent;
-
-		public Node(E elt){
-			this.elt = elt;
-		}
-	}
+//
+//	public class Node<E>{
+//		E elt;
+//		Node<E> leftChild, rightChild, parent;
+//
+//		public Node(E elt){
+//			this.elt = elt;
+//		}
+//	}
 
 	@Override
 	public int size() {
@@ -217,24 +217,44 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		moveToRoot(node);
 		Node<E> lChild = node.leftChild;
 		Node<E> rChild = node.rightChild;
-		if(lChild == null){
-			root = node.rightChild;
-		} else if(rChild != null){
-			lChild.parent = null;
-			rChild.parent = null;
-			// Finds the largest node left of the root, the node to
-			// be removed, and sets it to the new root
-			Node<E> largestLeft = findLargestRec(lChild);
-			moveToTop(largestLeft);
-			largestLeft.rightChild = rChild;
-			rChild.parent = largestLeft;
-			lChild.parent = largestLeft;
-			root = largestLeft;
-		} else {
-			// if both the left and the right child are null, the tree is
-			// empty, and the root is therefore null
+		
+		
+//		if(lChild == null){
+//			System.out.println("här");
+//			root = node.rightChild;
+//		} else if(rChild != null){
+		
+		if(lChild == null && rChild == null){
 			root = null;
+		} else if ( lChild != null){
+			Node<E> largestLeft = findLargestRec(lChild);
+			root.rightChild = null;
+			moveToRoot(largestLeft);
+			if(rChild != null){
+				rChild.parent = root;
+				root.rightChild = rChild;
+			}
+		}else{
+			root = rChild;
 		}
+//			System.out.println("här då");
+//			lChild.parent = null;
+//			rChild.parent = null;
+//			// Finds the largest node left of the root, the node to
+//			// be removed, and sets it to the new root
+//			Node<E> largestLeft = findLargestRec(lChild);
+//			System.out.println(largestLeft.elt);
+//			moveToTop(largestLeft);
+//			largestLeft.rightChild = rChild;
+//			rChild.parent = largestLeft;
+//			lChild.parent = largestLeft;
+//			root = largestLeft;
+//		} else {
+//			// if both the left and the right child are null, the tree is
+//			// empty, and the root is therefore null
+//			System.out.println("men");
+//			root = null;
+//		}
 		size--;
 		return true;
 	}
@@ -295,21 +315,26 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 	public static void main(String[] args){
 		SplayTreeSet<Integer> test = new SplayTreeSet<Integer>();
 		test.add(5);
+		BTreePrinter.printNode(test.root);
 		System.out.println(test.root.elt + " 5?");
 		test.add(8);
+		BTreePrinter.printNode(test.root);
 		System.out.println(test.root.elt + " 8?");
 		System.out.println(test.root.leftChild.elt + " 5?");
 		test.add(6);
+		BTreePrinter.printNode(test.root);
 		System.out.println(test.root.elt + " 6?");
 		System.out.println(test.root.leftChild.elt + " 5?");
 		System.out.println(test.root.rightChild.elt + " 8?");
 		test.add(9);
+		BTreePrinter.printNode(test.root);
 		System.out.println(test.root.elt + " 9?");
 		System.out.println(test.root.leftChild.elt + " 8?");
 		System.out.println(test.root.rightChild + " NULL?");
 		System.out.println(test.root.leftChild.leftChild.elt + " 6?");
 		System.out.println(test.root.leftChild.leftChild.leftChild.elt + " 5?");
 		test.add(10);
+		BTreePrinter.printNode(test.root);
 		System.out.println(test.root.elt + " 10?");
 		System.out.println(test.root.leftChild.elt + " 9?");
 		System.out.println(test.root.rightChild + " NULL?");
@@ -323,11 +348,14 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		System.out.println("-----------------------------------------------------------");
 		System.out.println("");
 		System.out.println(test.contains(5) + " true");
+		BTreePrinter.printNode(test.root);
 		System.out.println(test.root.elt + " 5?");
 		System.out.println(test.contains(12) + " false");
+		BTreePrinter.printNode(test.root);
 		System.out.println(test.root.elt + " 5?");
 		System.out.println("-----------------------------------------------------------");
 		test.remove(6);
+		BTreePrinter.printNode(test.root);
 		System.out.println(test.root.elt + " 5?");
 		System.out.println(test.root.leftChild + " null?");
 		System.out.println(test.root.rightChild.elt + " 8?");
@@ -335,10 +363,12 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		System.out.println(test.root.rightChild.rightChild.rightChild.elt + " 10?");
 		System.out.println(test.root.rightChild.leftChild + " null?");
 		test.remove(9);
+		BTreePrinter.printNode(test.root);
 		System.out.println(test.root.elt + " 8?");
 		System.out.println(test.root.rightChild.elt + " 10?");
 		System.out.println(test.root.leftChild.elt + " 5?");
 		System.out.println(test.remove(9) + " false?");
+		
 		
 
 	}
