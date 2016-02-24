@@ -273,7 +273,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 	 * on if x is greater or lesser than the node.
 	 * @param compNode
 	 * @param x
-	 * @return
+	 * @return node that's found
 	 */
 	private Node<E> findRec(Node<E> compNode, E x){
 		if(compNode == null){
