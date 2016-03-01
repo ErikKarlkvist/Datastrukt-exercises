@@ -1,4 +1,3 @@
-package partFour;
 
 /**
 * Extends an Edge with a weight and a name for the bus line.

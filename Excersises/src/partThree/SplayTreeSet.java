@@ -80,7 +80,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 	 * order to bring the node to the root (splaying). Continues recursively 
 	 * until node == root.
 	 * @param node
-	 * @return
+	 * @return true if element is root.
 	 */
 	private boolean moveToRootRec(Node<E> node){
 		if(node == root){
@@ -109,7 +109,9 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 	}
 
 	/**
-	 * Sets the left child of root to root/performs right rotation
+	 * 
+	 * @param node you wish to zig
+	 * @param goRight if you want to make a right rotation 
 	 */
 	private void zig(Node<E> node, boolean goRight){
 		if(goRight){
@@ -121,7 +123,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 
 	/**
 	 * 
-	 * @param node must have a parent
+	 * @param node you wish to zigzig
 	 * @param goRight true does right rotation, false does left
 	 */
 	private void zigzig(Node<E> node, boolean goRight){
@@ -134,10 +136,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		}
 	}
 
-	/**
-	 * 
-	 * @param node is leftchild and parent is rightchild
-	 */
+
 	private void zigzag(Node<E> node, boolean parentRight){
 		if(parentRight){
 			leftRotation(node);
@@ -175,10 +174,6 @@ public class SplayTreeSet<E extends Comparable<? super E>> implements SimpleSet<
 		}
 	}
 
-	/**
-	 * 
-	 * @param child is not root or null
-	 */
 	private void rightRotation(Node<E> child){
 		Node<E> parent = child.parent;
 

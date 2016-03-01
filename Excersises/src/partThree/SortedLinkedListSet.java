@@ -14,7 +14,7 @@ public class SortedLinkedListSet<E extends Comparable<? super E>> implements Sim
 	public int size() {
 		return theList.size();
 	}
-
+		
 	@Override
 	public boolean add(E x) {
 		for(int index = 0; index < theList.size(); index++){
