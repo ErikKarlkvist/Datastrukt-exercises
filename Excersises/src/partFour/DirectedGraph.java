@@ -44,7 +44,8 @@ public class DirectedGraph<E extends Edge> {
 	public Iterator<E> shortestPath(int from, int to) {
 		List<Integer> visitedNodes = new LinkedList<Integer>();
 		PriorityQueue<Data> pq = new PriorityQueue<Data>(nodes, new CompDijkstraPath<>());
-		pq.add(new Data(from, null, 0));
+		List<E> path = new LinkedList<E>();
+		pq.add(new Data(from, path, 0));
 		Data currData;
 		while(true){
 			while(true){

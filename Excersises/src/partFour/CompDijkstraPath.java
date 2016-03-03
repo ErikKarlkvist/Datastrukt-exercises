@@ -14,7 +14,7 @@ public class CompDijkstraPath<E extends Edge> implements Comparator<DirectedGrap
 		if(o2 == null){
 			return 1;
 		}
-		return (o1.getDistance() - o2.getDistance());
+		return Double.compare(o1.getDistance(),o2.getDistance());
 	}
 
 }
