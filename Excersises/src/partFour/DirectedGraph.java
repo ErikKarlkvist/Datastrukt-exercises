@@ -20,7 +20,7 @@ public class DirectedGraph<E extends Edge> {
 			return node;
 		}
 	
-		public double getDistance() {
+		public double getWeight() {
 			return distance;
 		}
 		
@@ -43,16 +43,12 @@ public class DirectedGraph<E extends Edge> {
 
 	public Iterator<E> shortestPath(int from, int to) {
 		List<Integer> visitedNodes = new LinkedList<Integer>();
-		PriorityQueue<Data> pq = new PriorityQueue<Data>(nodes, new CompDijkstraPath<>());
+		PriorityQueue<Data> pq = new PriorityQueue<Data>(new CompDijkstraPath<>());
 		List<E> path = new LinkedList<E>();
 		pq.add(new Data(from, path, 0));
 		Data currData;
-		while(true){
+		while(!pq.isEmpty()){
 			while(true){
-				if(pq.isEmpty()){
-					//list is not coheren
-					return null;
-				}
 				currData = pq.poll();
 				if(!visitedNodes.contains(currData.getNode())){
 					break;
@@ -62,16 +58,17 @@ public class DirectedGraph<E extends Edge> {
 				return currData.getPath().iterator();
 			}
 			visitedNodes.add(currData.getNode());
+			
 			for(E e: edges){
-				if(e.from == currData.getNode()){
-					List<E> currPath = currData.getPath();
+				if(e.from == currData.getNode() && !visitedNodes.contains(e.to)){
+					List<E> currPath = (List<E>)((LinkedList<E>) currData.getPath()).clone();//hmmmm
 					currPath.add(e);
-					Data newData = new Data(e.to, currPath, e.getWeight());
+					Data newData = new Data(e.to, currPath,currData.getWeight() +e.getWeight());
 					pq.add(newData);
 				}
 			}
 		}
-		//return edges.iterator();
+		return null;
 	}
 		
 	public Iterator<E> minimumSpanningTree() {

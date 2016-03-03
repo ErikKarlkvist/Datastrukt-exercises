@@ -8,13 +8,16 @@ public class CompDijkstraPath<E extends Edge> implements Comparator<DirectedGrap
 
 	@Override
 	public int compare(Data o1, Data o2) {
+		if(o1 == o2){
+			return 0;
+		}
 		if(o1 == null){
 			return -1;
 		}
 		if(o2 == null){
 			return 1;
 		}
-		return Double.compare(o1.getDistance(),o2.getDistance());
+		return Double.compare(o1.getWeight(),o2.getWeight());
 	}
 
 }
